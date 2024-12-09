@@ -11,12 +11,31 @@ static int calisanDiziBoyut = 0; // Tüm çalışanları tutacağım dizinin boy
 static int birimDiziBoyut = 0;
 
 //1.
-Birim birimOlustur(char* birimAdi, unsigned short int birimKodu, Calisan* birimCalisanlar) { // Tüm çalışanları bir diziden alıyorum diğer fonksiyonlarda birim kodu kontrolü yapıyorum.
-        Birim birim;                                                     // Halbuki burada birim kodu kontrolü yapıp yeni bir dizi oluşturup birim çalışanlarını ayırmayı deneyebilirim.
+Birim birimOlustur(char* birimAdi, unsigned short int birimKodu) {
+        Birim birim;
         birim.birimAdi = birimAdi;
         birim.birimKodu = birimKodu;
-        birim.birimCalisanlar = birimCalisanlar;
+        birim.birimCalisanlar = NULL;
         return birim;
+}
+
+//1.1
+void birimCalisanlariDüzenle(Birim* birim, Calisan* birimCalisanlar) {
+        Calisan* yeniCalisanlar = NULL;
+        int calisanSayisi = 0;                                                               // Halbuki burada birim kodu kontrolü yapıp yeni bir dizi oluşturup birim çalışanlarını ayırmayı deneyebilirim.
+        for(size_t i = 0; i < calisanDiziBoyut + 1; i++) { // Index hesaplaması nedeniyle +1.
+                if (birimCalisanlar[i].birimKodu == birim->birimKodu) {
+                        if(yeniCalisanlar == NULL) {
+                                yeniCalisanlar = (Calisan*)malloc(sizeof(Calisan));
+                                yeniCalisanlar[calisanSayisi] = birimCalisanlar[i];
+                        }else {
+                                yeniCalisanlar = (Calisan*)realloc(yeniCalisanlar, (calisanSayisi + 1) * sizeof(Calisan));
+                                yeniCalisanlar[calisanSayisi] = birimCalisanlar[i];
+                        }
+                        calisanSayisi++;
+                }
+        }
+        birim->birimCalisanlar = yeniCalisanlar;
 }
 
 //2.
@@ -81,7 +100,7 @@ void calisanYazdir(Calisan calisan) {
 void birimYazdir(Birim birim) {
         printf("Birim Adi: %s\n", birim.birimAdi);
         printf("Birim Kodu: %d\n", birim.birimKodu);
-        for (int i = 0; i < calisanDiziBoyut + 1; i++) { // Index hesaplaması nedeniyle +1.
+        for (int i = 0; i < calisanDiziBoyut /*(sizeof(birim.birimCalisanlar) / sizeof(birim.birimCalisanlar[0]))*/ + 1; i++) { // Index hesaplaması nedeniyle +1.
                 if(birim.birimCalisanlar[i].birimKodu == birim.birimKodu) { // Her birimin kendi çalışanlarını yazdır.
                         printf("Calisanlarin Adi Soyadi: %s %s\n", birim.birimCalisanlar[i].calisanAdi, birim.birimCalisanlar[i].calisanSoyadi);
 
@@ -154,10 +173,12 @@ void enZenginler(Birim* birimler) {
 }
 
 //10.
-void minimumMaas(float maas) {
-        int calismaYili = 0;
+void minimumMaas(float maas, Calisan* calisanlar) {
         for (size_t i = 0; i < calisanDiziBoyut; i++) {
-                // CALIŞANLARA NASIL ERİŞECEĞİM??
+                if(calisanlar[i].maas < maas && 2024-calisanlar[i].maas > 10) {
+                        calisanlar[i].maas = maas;
+                        printf("%s yeni maaşı: %.2f\n", calisanlar[i].calisanAdi, calisanlar[i].maas);
+                }
         }
 }
 
