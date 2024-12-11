@@ -24,13 +24,13 @@ Birim birimOlustur(char* birimAdi, unsigned short int birimKodu);
 //Birim birimOlustur2(char* birimAdi, unsigned short int birimKodu);
 void birimCalisanlariDüzenle(Birim* birim, Calisan* birimCalisanlar);
 // 2. İlgili değerleri alıp bir Calisan struct döndüren fonksiyon.
-Calisan calisanOlustur(char* calisanAdi, char* calisanSoyadi, unsigned short int birimKodu, float maas, int girisYil);
+Calisan* calisanOlustur(char* calisanAdi, char* calisanSoyadi, unsigned short int birimKodu, float maas, int girisYil);
 // 3. Oluşturulan yeni struct yapılarını diziye ekleyen fonksiyon.
-void calisanlarıDiziyeEkle(Calisan** calisanlar, Calisan calisan);
+void calisanlarıDiziyeEkle(Calisan*** calisanlar, Calisan* calisan);
 //3.1
 void birimleriDiziyeEkle(Birim** birimler, Birim birim);
 // 4. Parametre olarak Calisan türünden değişken alıp bilgilerini yazdıran bir fonksiyon.
-void calisanYazdir(Calisan calisan);
+void calisanYazdir(Calisan* calisan);
 // 5. Parametre olarak Birim türünden değişken alıp bilgilerini yazdıran bir fonksiyon.
 void birimYazdir(Birim birim);
 // 6. Parametre olarak Birim türünden dinamik bir dizi alıp bilgilerini yazdıran bir fonksiyon.
@@ -44,7 +44,8 @@ void enZenginler(Birim* birimler);
 // 10. Parametre olarak bir maaş değeri alıp, 10 yıldan fazla çalışanlar bu maaştan az alıyor ise maaşlarını parametre olarak verilen maaşa eşitleyen fonksiyon.
 void minimumMaas(float maas, Calisan* calisanlar);
 // 11. Tüm Birim ve Calisan bilgilerini bir dosyaya yazan bir fonksiyon.
-void dısaAktar(Birim* birimler);
+void dısaAktaBirimr(Birim* birimler);
+void dısaAktarCalisan(Calisan* calisanlar);
 // 12. Tüm Birim ve Calisan bilgilerini dosyadan diziye aktaran bir fonksiyon.
 void iceAktar(FILE* dosya);
 

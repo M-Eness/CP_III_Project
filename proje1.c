@@ -39,31 +39,31 @@ void birimCalisanlariDüzenle(Birim* birim, Calisan* birimCalisanlar) {
 }
 
 //2.
-Calisan calisanOlustur(char* calisanAdi, char* calisanSoyadi, unsigned short int birimKodu, float maas, int girisYil) {
-        Calisan calisan;
-        calisan.calisanAdi = calisanAdi;
-        calisan.calisanSoyadi = calisanSoyadi;
-        calisan.birimKodu = birimKodu;
-        calisan.maas = maas;
-        calisan.girisYili = girisYil;
+Calisan* calisanOlustur(char* calisanAdi, char* calisanSoyadi, unsigned short int birimKodu, float maas, int girisYil) {
+        Calisan* calisan = NULL;
+        calisan = malloc(sizeof(Calisan));
+        calisan->calisanAdi = calisanAdi;
+        calisan->calisanSoyadi = calisanSoyadi;
+        calisan->birimKodu = birimKodu;
+        calisan->maas = maas;
+        calisan->girisYili = girisYil;
         return calisan;
 }
 
 //3.
-void calisanlarıDiziyeEkle(Calisan** calisanlar, Calisan calisan) {
+void calisanlarıDiziyeEkle(Calisan*** calisanlar, Calisan* calisan) {
     if (*calisanlar == NULL) { // İlk kez ekleniyor
-        *calisanlar = (Calisan*)malloc(sizeof(Calisan));
+        *calisanlar = (Calisan**)malloc(sizeof(Calisan*));
         if (*calisanlar == NULL) {
             printf("Bellek ayırma başarısız!\n");
             exit(1);
         }
-        // İlk çalışanı ekleyin
         (*calisanlar)[0] = calisan;
         calisanDiziBoyut = 0; // İlk eklenen çalışan için
     } else {
         calisanDiziBoyut++; // Çalışan sayısını artır
-        *calisanlar = (Calisan*)realloc(*calisanlar, (calisanDiziBoyut + 1) * sizeof(Calisan));
-        if (*calisanlar == NULL) {
+        *calisanlar = (Calisan**)realloc(*calisanlar, (calisanDiziBoyut + 1) * sizeof(Calisan*));
+        if (**calisanlar == NULL) {
             printf("Bellek genişletme başarısız!\n");
             exit(1);
         }
@@ -88,12 +88,13 @@ void birimleriDiziyeEkle(Birim** birimler, Birim birim) {
 
 
 //4.
-void calisanYazdir(Calisan calisan) {
-        printf("Calisan Adi: %s\n", calisan.calisanAdi);
-        printf("Calisan Soyadi: %s\n", calisan.calisanSoyadi);
-        printf("Calisan Birim Kodu: %d\n", calisan.birimKodu);
-        printf("Calisan Maasi: %.2f\n", calisan.maas);
-        printf("Calisan Giris Yili: %d\n", calisan.girisYili);
+void calisanYazdir(Calisan* calisan) {
+        printf("Calisan Adi: %s\n", calisan->calisanAdi);
+        printf("Calisan Soyadi: %s\n", calisan->calisanSoyadi);
+        printf("Calisan Birim Kodu: %d\n", calisan->birimKodu);
+        printf("Calisan Maasi: %.2f\n", calisan->maas);
+        printf("Calisan Giris Yili: %d\n", calisan->girisYili);
+        printf("Adres: %p\n", &calisan);
 }
 
 //5.
@@ -175,20 +176,30 @@ void enZenginler(Birim* birimler) {
 //10.
 void minimumMaas(float maas, Calisan* calisanlar) {
         for (size_t i = 0; i < calisanDiziBoyut; i++) {
-                if(calisanlar[i].maas < maas && 2024-calisanlar[i].maas > 10) {
+                if(calisanlar[i].maas < maas && 2024-calisanlar[i].girisYili > 10) {
                         calisanlar[i].maas = maas;
                         printf("%s yeni maaşı: %.2f\n", calisanlar[i].calisanAdi, calisanlar[i].maas);
+                        printf("Adres: %p\n", &calisanlar[i]);
                 }
         }
 }
 
 //11.
-void dısaAktar(Birim* birimler) {
+void dısaAktarBirim(Birim* birimler) {
 
 }
 
+void dısaAktarCalisan(Calisan* calisanlar) {
+
+}
+
+
 //12.
-void iceAktar(FILE* dosya) {
+void iceAktarBirim(FILE* dosya) {
+
+}
+
+void iceAktarCalisan(FILE* dosya) {
 
 }
 
