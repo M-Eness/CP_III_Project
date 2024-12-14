@@ -5,7 +5,7 @@
 #define PROJE1_H
 #include <stdio.h>
 
-int calisanDiziBoyut; // Tüm çalışanları tutacağım dizinin boyut kontrolü için oluşturuldu.
+int calisanDiziBoyut; // Tüm çalışanları sayısı tutuluyor.
 int birimDiziBoyut;
 
 typedef struct {
@@ -19,12 +19,13 @@ typedef struct {
 typedef struct {
     char *birimAdi;
     unsigned short int birimKodu;
-    Calisan* birimCalisanlar;
+    Calisan** birimCalisanlar;
+    int calisanSayisi;
 } Birim;
 
 // 1. İlgili değerleri alıp bir Birim struct döndüren bir fonksiyon.
 Birim* birimOlustur(char* birimAdi, unsigned short int birimKodu);
-//Birim birimOlustur2(char* birimAdi, unsigned short int birimKodu);
+//1.1 Parametre olarak çalışan dizisi alıp birime ekleyen fonksiyon.
 void birimCalisanlariDüzenle(Birim* birim, Calisan** birimCalisanlar);
 // 2. İlgili değerleri alıp bir Calisan struct döndüren fonksiyon.
 Calisan* calisanOlustur(char* calisanAdi, char* calisanSoyadi, unsigned short int birimKodu, float maas, int girisYil);
@@ -48,9 +49,12 @@ void enZenginler(Birim** birimler);
 void minimumMaas(float maas, Calisan* calisanlar);
 // 11. Tüm Birim ve Calisan bilgilerini bir dosyaya yazan bir fonksiyon.
 void dısaAktaBirimr(Birim* birimler);
+//11.1
 void dısaAktarCalisan(Calisan* calisanlar);
-// 12. Tüm Birim ve Calisan bilgilerini dosyadan diziye aktaran bir fonksiyon.
-void iceAktar(FILE* dosya);
+//12. Tüm Birim ve Calisan bilgilerini dosyadan diziye aktaran bir fonksiyon.
+void iceAktarBirim(FILE* dosya);
+//12.1
+void iceAktarCalisan(FILE* dosya);
 //13. Bellek alanlarını serbest bırakan fonksiyonlar;
 void birimleriSerbestBirak(Birim** birimler);
 void calisanlariSerbestBirak(Calisan** calisanlar);

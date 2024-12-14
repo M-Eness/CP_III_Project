@@ -17,23 +17,23 @@ Birim* birimOlustur(char* birimAdi, unsigned short int birimKodu) {
         birim->birimAdi = birimAdi;
         birim->birimKodu = birimKodu;
         birim->birimCalisanlar = NULL;
+        birim->calisanSayisi = 0;
         return birim;
 }
 
 //1.1
 void birimCalisanlariDüzenle(Birim* birim, Calisan** birimCalisanlar) {
-        Calisan* yeniCalisanlar = NULL;
-        int calisanSayisi = 0;                                                               // Halbuki burada birim kodu kontrolü yapıp yeni bir dizi oluşturup birim çalışanlarını ayırmayı deneyebilirim.
+        Calisan** yeniCalisanlar = NULL;
         for(size_t i = 0; i < calisanDiziBoyut + 1; i++) { // Index hesaplaması nedeniyle +1.
-                if (birimCalisanlar[i]->birimKodu == birim->birimKodu) {
+                if ((*birimCalisanlar)[i].birimKodu == birim->birimKodu) {
                         if(yeniCalisanlar == NULL) {
-                                yeniCalisanlar = (Calisan*)malloc(sizeof(Calisan));
-                                yeniCalisanlar[calisanSayisi] = *birimCalisanlar[i];
+                                yeniCalisanlar = (Calisan**)malloc(sizeof(Calisan*));
+                                yeniCalisanlar[birim->calisanSayisi] = birimCalisanlar[i];
                         }else {
-                                yeniCalisanlar = (Calisan*)realloc(yeniCalisanlar, (calisanSayisi + 1) * sizeof(Calisan));
-                                yeniCalisanlar[calisanSayisi] = *birimCalisanlar[i];
+                                yeniCalisanlar = (Calisan**)realloc(yeniCalisanlar, (birim->calisanSayisi + 1) * sizeof(Calisan*));
+                                yeniCalisanlar[birim->calisanSayisi] = birimCalisanlar[i];
                         }
-                        calisanSayisi++;
+                        birim->calisanSayisi++;
                 }
         }
         birim->birimCalisanlar = yeniCalisanlar;
@@ -76,7 +76,6 @@ void calisanlarıDiziyeEkle(Calisan*** calisanlar, Calisan* calisan) {
 
 //3.1
 void birimleriDiziyeEkle(Birim*** birimler, Birim* birim) {
-
         if (*birimler == NULL) { // İlk kez ekleniyor
                 *birimler = (Birim**)malloc(sizeof(Birim*));
                 if (*birimler == NULL) {
@@ -94,19 +93,6 @@ void birimleriDiziyeEkle(Birim*** birimler, Birim* birim) {
                 }
                 (*birimler)[birimDiziBoyut] = birim; // Yeni birim ekle
         }
-
-
-        /* if(*birimler == NULL) {
-                *birimler = (Birim**)malloc(sizeof(Birim*)); // Calisanlar dizisi başlangıçta NULL olacağı için başlangıçta Calisan boyutunda bellkete yer ayrıldı.
-                if(*birimler == NULL) {
-                        printf("Bellek ayırma başarısız!\n");
-                        exit(1);
-                }
-        }else {
-                birimDiziBoyut++; // Birim sayısı arttırıldı.
-                *birimler = (Birim*)realloc(*birimler, (birimDiziBoyut + 1) * sizeof(Birim*)); // Index 0'dan başladığı için birimDiziBoyut + 1 ile realloc işlemi yapıldı.
-        }
-        (*birimler)[birimDiziBoyut] = birim;*/
 }
 //4.
 void calisanYazdir(Calisan* calisan) {
@@ -121,11 +107,8 @@ void calisanYazdir(Calisan* calisan) {
 void birimYazdir(Birim* birim) {
         printf("Birim Adi: %s\n", birim->birimAdi);
         printf("Birim Kodu: %d\n", birim->birimKodu);
-        for (int i = 0; i < calisanDiziBoyut /*(sizeof(birim.birimCalisanlar) / sizeof(birim.birimCalisanlar[0]))*/ + 1; i++) { // Index hesaplaması nedeniyle +1.
-                if(birim->birimCalisanlar[i].birimKodu == birim->birimKodu) { // Her birimin kendi çalışanlarını yazdır.
-                        printf("Calisanlarin Adi Soyadi: %s %s\n Maaşı: %f\n", birim->birimCalisanlar[i].calisanAdi, birim->birimCalisanlar[i].calisanSoyadi, birim->birimCalisanlar[i].maas);
-
-                }
+        for (int i = 0; i < birim->calisanSayisi; i++) {
+                printf("Calisanlarin Adi Soyadi: %s %s\n Maaşı: %f\n", birim->birimCalisanlar[i]->calisanAdi, birim->birimCalisanlar[i]->calisanSoyadi, birim->birimCalisanlar[i]->maas);
         }
 }
 
@@ -133,10 +116,8 @@ void birimYazdir(Birim* birim) {
 void birimleriYazdir(Birim** birimler) {
         printf("BİRİMLER YAZIDIRILIYOR\n");
         for(size_t i = 0; i < birimDiziBoyut + 1; i++ ) { // Index hesaplaması nedeniyle +1.
-                if(birimler[i] != NULL && birimler[i]->birimAdi[0] != '\0') { // İlgili birimin içinin boş olup olmadığının kontrolü
-                        birimYazdir(birimler[i]);
-                        printf("////////////////////////\n");
-                }
+                birimYazdir(birimler[i]);
+                printf("////////////////////////\n");
         }
 }
 
@@ -144,11 +125,9 @@ void birimleriYazdir(Birim** birimler) {
 float birimOrtMaas(Birim* birim) {
         int calisanSayisi = 0;
         float toplamMaas = 0;
-        for (int i = 0; i < calisanDiziBoyut + 1; i++){ // Index hesaplaması nedeniyle +1.
-                if(birim->birimCalisanlar[i].birimKodu == birim->birimKodu) { // Her birimin kendi çalışanlarını yazdır.
-                        toplamMaas += birim->birimCalisanlar[i].maas;
+        for (int i = 0; i < birim->calisanSayisi; i++){
+                        toplamMaas += birim->birimCalisanlar[i]->maas;
                         calisanSayisi++;
-                }
         }
         float ortMaas = toplamMaas / calisanSayisi;
         return ortMaas;
@@ -158,13 +137,9 @@ float birimOrtMaas(Birim* birim) {
 void yüksekMaasAlanlar(Birim* birim) {
         float ortMaas = birimOrtMaas(birim);
         printf("Ortalmadan Yüksek Maas Alanlar Yazdiriliyor.\n");
-        for (int i = 0; i < calisanDiziBoyut + 1; i++){ // Index hesaplaması nedeniyle +1.
-                if(birim->birimCalisanlar[i].birimKodu == birim->birimKodu) { // Her birimin kendi çalışanlarını yazdır.
-                        if(birim->birimCalisanlar[i].maas > ortMaas) {
-                                printf("%s %s, %s biriminde ortalamadan yüksek maaş almaktadır.\n", birim->birimCalisanlar[i].calisanAdi,
-                                                                                                    birim->birimCalisanlar[i].calisanSoyadi,
-                                                                                                    birim->birimAdi);
-                        }
+        for (int i = 0; i < birim->calisanSayisi; i++){
+                if(birim->birimCalisanlar[i]->maas > ortMaas) {
+                        printf("%s %s, %s biriminde ortalamadan yüksek maaş almaktadır.\n", birim->birimCalisanlar[i]->calisanAdi, birim->birimCalisanlar[i]->calisanSoyadi,birim->birimAdi);
                 }
         }
 }
@@ -173,21 +148,17 @@ void yüksekMaasAlanlar(Birim* birim) {
 void enZenginler(Birim** birimler) {
         float enYuksekMaas = 0;
         for(size_t i = 0; i < birimDiziBoyut + 1; i++ ) { // Index hesaplaması nedeniyle +1.
-                if(birimler[i]->birimAdi != NULL) { // İlgili birimin içinin boş olup olmadığının kontrolü ???? BU KONTROL GEREKLİ OLMAYABİLİR.
                         char enZenginAdSoyad[100] = "";
-                        for (size_t j = 0; j < calisanDiziBoyut + 1; j++){ // Index hesaplaması nedeniyle +1.
-                                if(birimler[i]->birimCalisanlar[j].birimKodu == birimler[i]->birimKodu) { // Her birimin kendi çalışanlarını al.
-                                        if(birimler[i]->birimCalisanlar[j].maas > enYuksekMaas) {
+                        for (size_t j = 0; j < birimler[i]->calisanSayisi; j++){
+                                        if(birimler[i]->birimCalisanlar[j]->maas > enYuksekMaas) {
                                                 strcpy(enZenginAdSoyad, "");
-                                                enYuksekMaas = birimler[i]->birimCalisanlar[j].maas;
-                                                strcpy(enZenginAdSoyad, birimler[i]->birimCalisanlar[j].calisanAdi);
+                                                enYuksekMaas = birimler[i]->birimCalisanlar[j]->maas;
+                                                strcpy(enZenginAdSoyad, birimler[i]->birimCalisanlar[j]->calisanAdi);
                                                 strcat(enZenginAdSoyad, " ");
-                                                strcat(enZenginAdSoyad, birimler[i]->birimCalisanlar[j].calisanSoyadi);
+                                                strcat(enZenginAdSoyad, birimler[i]->birimCalisanlar[j]->calisanSoyadi);
                                         }
-                                }
                         }
-                        printf("%s biriminin en yüksek maaş alan calisani: %s\n", birimler[i]->birimAdi, enZenginAdSoyad);
-                }
+                printf("%s biriminin en yüksek maaş alan calisani: %s\n", birimler[i]->birimAdi, enZenginAdSoyad);
                 enYuksekMaas = 0;
         }
 }
@@ -207,6 +178,7 @@ void dısaAktarBirim(Birim* birimler) {
 
 }
 
+//11.1
 void dısaAktarCalisan(Calisan* calisanlar) {
 
 }
@@ -217,10 +189,12 @@ void iceAktarBirim(FILE* dosya) {
 
 }
 
+//12.1
 void iceAktarCalisan(FILE* dosya) {
 
 }
 
+//13.
 void birimleriSerbestBirak(Birim** birimler) {
         for (size_t i = 0; i < birimDiziBoyut; i++) {
                 if (birimler[i] != NULL) {
@@ -232,6 +206,7 @@ void birimleriSerbestBirak(Birim** birimler) {
         free(birimler);
 }
 
+//13.1
 void calisanlariSerbestBirak(Calisan** calisanlar) {
         for (size_t i = 0; i < calisanDiziBoyut; i++) {
                 if (calisanlar[i] != NULL) {
