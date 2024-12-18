@@ -26,7 +26,7 @@ typedef struct {
 // 1. İlgili değerleri alıp bir Birim struct döndüren bir fonksiyon.
 Birim* birimOlustur(char* birimAdi, unsigned short int birimKodu);
 //1.1 Parametre olarak çalışan dizisi alıp birime ekleyen fonksiyon.
-void birimCalisanlariDüzenle(Birim* birim, Calisan** birimCalisanlar);
+void birimCalisanlariDüzenle(Birim* birim, Calisan* calisan);
 // 2. İlgili değerleri alıp bir Calisan struct döndüren fonksiyon.
 Calisan* calisanOlustur(char* calisanAdi, char* calisanSoyadi, unsigned short int birimKodu, float maas, int girisYil);
 // 3. Oluşturulan yeni struct yapılarını diziye ekleyen fonksiyon.
@@ -46,18 +46,17 @@ void yüksekMaasAlanlar(Birim* birim);
 // 9. Her birimin ayrı ayrı en yüksek maaş alan çalışanını yazdıran fonksiyon.
 void enZenginler(Birim** birimler);
 // 10. Parametre olarak bir maaş değeri alıp, 10 yıldan fazla çalışanlar bu maaştan az alıyor ise maaşlarını parametre olarak verilen maaşa eşitleyen fonksiyon.
-void minimumMaas(float maas, Calisan* calisanlar);
+void minimumMaas(float maas, Calisan** calisanlar);
 // 11. Tüm Birim ve Calisan bilgilerini bir dosyaya yazan bir fonksiyon.
-void dısaAktaBirimr(Birim* birimler);
+void dısaAktarBirim(Birim** birimler, const char* dosyaAdi);
 //11.1
-void dısaAktarCalisan(Calisan* calisanlar);
+void dısaAktarCalisan(Calisan** calisanlar, const char* dosyaAdi);
 //12. Tüm Birim ve Calisan bilgilerini dosyadan diziye aktaran bir fonksiyon.
-void iceAktarBirim(FILE* dosya);
+void iceAktarBirim(const char* dosyaAdi, Birim*** birimler);
 //12.1
-void iceAktarCalisan(FILE* dosya);
-//13. Bellek alanlarını serbest bırakan fonksiyonlar;
-void birimleriSerbestBirak(Birim** birimler);
-void calisanlariSerbestBirak(Calisan** calisanlar);
+void iceAktarCalisan(const char* dosyaAdi, Calisan*** calisanlar, Birim*** birimler);
+//13. Bellek alanlarını serbest bırakan fonksiyon.
+void tumVeriyiSerbestBirak(Birim** birimDizi, int birimSayisi);
 
 
 #endif //PROJE1_H
