@@ -22,7 +22,7 @@ Birim* birimOlustur(const char* birimAdi, unsigned short int birimKodu) {
 }
 
 //1.1
-void birimCalisanlariDüzenle(Birim* birim, Calisan* calisan) {
+void calisaniBirimeEkle(Birim* birim, Calisan* calisan) {
     int calisanMevcutMu = 1;
     // Çalışanın zaten birimde olup olmadığını kontrol et.
     for (size_t j = 0; j < birim->calisanSayisi; j++) {
@@ -35,8 +35,8 @@ void birimCalisanlariDüzenle(Birim* birim, Calisan* calisan) {
             }
         }
     }
-    // Eğer çalışan birimde mevcut değilse, birime ekle.
-    if (calisanMevcutMu) {
+    // Eğer çalışan birimde mevcut değilse ve birim kodu uyuşuyorsa birime ekle.
+    if (calisanMevcutMu && birim->birimKodu == calisan->birimKodu) {
         if (birim->birimCalisanlar == NULL) {
             birim->birimCalisanlar = (Calisan**)malloc(sizeof(Calisan*));
         }
@@ -45,7 +45,8 @@ void birimCalisanlariDüzenle(Birim* birim, Calisan* calisan) {
         }
         birim->birimCalisanlar[birim->calisanSayisi] = calisan;
         birim->calisanSayisi++;
-    }
+    }else
+        printf("Çalışan mevcut veya birim kodları uyuşmuyor kontrol edin!\n");
 }
 
 //2.
@@ -100,28 +101,31 @@ void calisanlarıDiziyeEkle(Calisan*** calisanlar, Calisan* calisan) { // Parame
 
 //3.1
 void birimleriDiziyeEkle(Birim*** birimler, Birim* birim) { // Parametre olarak birimler dizisinin adresini ve birim* alınıyor.
-    if (*birimler == NULL) { // İlk kez ekleniyor
-        *birimler = (Birim**)malloc(sizeof(Birim*));
-        if (*birimler == NULL) {
-            printf("Bellek ayırma başarısız!\n");
-            exit(1);
+    if (birim != NULL) { // Verilen birim null olmamalı.
+        if (*birimler == NULL) { // İlk kez ekleniyor
+            *birimler = (Birim**)malloc(sizeof(Birim*));
+            if (*birimler == NULL) {
+                printf("Bellek ayırma başarısız!\n");
+                exit(1);
+            }
+            (*birimler)[0] = birim;
+            birimDiziBoyut = 0; // İlk eklenen çalışan için
         }
-        (*birimler)[0] = birim;
-        birimDiziBoyut = 0; // İlk eklenen çalışan için
-    }
-    else {
-        birimDiziBoyut++; // Birim sayısını artır
-        *birimler = (Birim**)realloc(*birimler, (birimDiziBoyut + 1) * sizeof(Birim*));
-        if (*birimler == NULL) {
-            printf("Bellek genişletme başarısız!\n");
-            free(birim->birimAdi);
-            // realloc başarısız olduğu durumda birimi serbest bırakmak gerekmekte yoksa sızıntı meydana gelir.
-            free(birim);
-            birimDiziBoyut--;
-            exit(1);
+        else {
+            birimDiziBoyut++; // Birim sayısını artır
+            *birimler = (Birim**)realloc(*birimler, (birimDiziBoyut + 1) * sizeof(Birim*));
+            if (*birimler == NULL) {
+                printf("Bellek genişletme başarısız!\n");
+                free(birim->birimAdi);
+                // realloc başarısız olduğu durumda birimi serbest bırakmak gerekmekte yoksa sızıntı meydana gelir.
+                free(birim);
+                birimDiziBoyut--;
+                exit(1);
+            }
+            (*birimler)[birimDiziBoyut] = birim; // Yeni birim ekle
         }
-        (*birimler)[birimDiziBoyut] = birim; // Yeni birim ekle
-    }
+    }else
+    printf("Geçersiz birim girildi!\n");
 }
 
 //4.
@@ -309,8 +313,8 @@ void iceAktarCalisan(const char* dosyaAdi, Calisan*** calisanlar, Birim*** birim
             Calisan* yeniCalisan = calisanOlustur(calisanAdi, calisanSoyadi, birimKodu, maas, girisYili);
             calisanlarıDiziyeEkle(calisanlar, yeniCalisan);
             for (size_t i = 0; i < birimDiziBoyut + 1; i++) {
-                if ((*birimler)[i]->birimKodu == yeniCalisan->birimKodu) {
-                    birimCalisanlariDüzenle((*birimler)[i], yeniCalisan);
+                if ((*birimler)[i]->birimKodu == yeniCalisan->birimKodu) { // Burada boşuna iterasyon yapmamak için kontrol yapıyorum.
+                    calisaniBirimeEkle((*birimler)[i], yeniCalisan);
                     break;
                 }
             }

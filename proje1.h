@@ -26,7 +26,7 @@ typedef struct {
 // 1. İlgili değerleri alıp bir Birim struct döndüren bir fonksiyon.
 Birim* birimOlustur(const char* birimAdi, unsigned short int birimKodu);
 //1.1 Parametre olarak çalışan dizisi alıp birime ekleyen fonksiyon.
-void birimCalisanlariDüzenle(Birim* birim, Calisan* calisan);
+void calisaniBirimeEkle(Birim* birim, Calisan* calisan);
 // 2. İlgili değerleri alıp bir Calisan struct döndüren fonksiyon.
 Calisan* calisanOlustur(const char* calisanAdi, const char* calisanSoyadi, unsigned short int birimKodu, float maas, int girisYil);
 // 3. Oluşturulan yeni struct yapılarını diziye ekleyen fonksiyon.
