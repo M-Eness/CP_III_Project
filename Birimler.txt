@@ -1,0 +1,3 @@
+IT;01
+Guvenlik;02
+Muhasebe;03

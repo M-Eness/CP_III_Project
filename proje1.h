@@ -24,11 +24,11 @@ typedef struct {
 } Birim;
 
 // 1. İlgili değerleri alıp bir Birim struct döndüren bir fonksiyon.
-Birim* birimOlustur(char* birimAdi, unsigned short int birimKodu);
+Birim* birimOlustur(const char* birimAdi, unsigned short int birimKodu);
 //1.1 Parametre olarak çalışan dizisi alıp birime ekleyen fonksiyon.
 void birimCalisanlariDüzenle(Birim* birim, Calisan* calisan);
 // 2. İlgili değerleri alıp bir Calisan struct döndüren fonksiyon.
-Calisan* calisanOlustur(char* calisanAdi, char* calisanSoyadi, unsigned short int birimKodu, float maas, int girisYil);
+Calisan* calisanOlustur(const char* calisanAdi, const char* calisanSoyadi, unsigned short int birimKodu, float maas, int girisYil);
 // 3. Oluşturulan yeni struct yapılarını diziye ekleyen fonksiyon.
 void calisanlarıDiziyeEkle(Calisan*** calisanlar, Calisan* calisan);
 //3.1
@@ -57,6 +57,4 @@ void iceAktarBirim(const char* dosyaAdi, Birim*** birimler);
 void iceAktarCalisan(const char* dosyaAdi, Calisan*** calisanlar, Birim*** birimler);
 //13. Bellek alanlarını serbest bırakan fonksiyon.
 void tumVeriyiSerbestBirak(Birim** birimDizi, int birimSayisi);
-
-
 #endif //PROJE1_H
