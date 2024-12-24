@@ -3,7 +3,6 @@
 //
 #ifndef PROJE1_H
 #define PROJE1_H
-#include <stdio.h>
 
 int calisanDiziBoyut; // Tüm çalışanları sayısı tutuluyor.
 int birimDiziBoyut;
