@@ -1,3 +1,10 @@
+/*
+ * @file main.c
+ * @description Projede kullanılan fonksiyonların denendiği C dosyası.
+ * @assignment 1. Ödev
+ * @date 07.12.2024
+ * @author Mehmet Enes Erden | mehmetenes.erden@stu.fsm.edu.tr
+ */
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -20,7 +27,7 @@ int main(int argc, char *argv[]) {
     birimleriDiziyeEkle(&birimler, b1);
     Calisan* c1 = calisanOlustur("Mustafa", "Sağlam", 4, 45000, 2020);
     calisanlarıDiziyeEkle(&calisanlar, c1);
-    birimCalisanlariDüzenle(b1, c1);
+    calisaniBirimeEkle(b1, c1);
     iceAktarCalisan(calisanDosyaAdi, &calisanlar, &birimler);
 
     for (size_t i = 0; i < calisanDiziBoyut + 1; i++ ) {

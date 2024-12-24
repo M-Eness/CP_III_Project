@@ -174,7 +174,7 @@ void yüksekMaasAlanlar(Birim* birim) { // Verilen birimde ortalamadan yüksek m
     float ortMaas = birimOrtMaas(birim);
     for (int i = 0; i < birim->calisanSayisi; i++) {
         if (birim->birimCalisanlar[i]->maas > ortMaas) {
-            printf("-> %s %s, %s biriminde ortalamadan yüksek maaş almaktadır.\n-----------------------------\n",
+            printf("\n-> %s %s, %s biriminde ortalamadan yüksek maaş almaktadır.\n-----------------------------\n",
                    birim->birimCalisanlar[i]->calisanAdi,
                    birim->birimCalisanlar[i]->calisanSoyadi, birim->birimAdi);
         }
