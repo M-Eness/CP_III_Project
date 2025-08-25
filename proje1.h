@@ -3,9 +3,8 @@
 //
 #ifndef PROJE1_H
 #define PROJE1_H
-
-int calisanDiziBoyut; // Tüm çalışanları sayısı tutuluyor.
-int birimDiziBoyut;
+extern int calisanDiziBoyut; // Tüm çalışanları sayısı tutuluyor.
+extern int birimDiziBoyut;
 
 typedef struct {
     char *calisanAdi;

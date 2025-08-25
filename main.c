@@ -23,12 +23,15 @@ int main(int argc, char *argv[]) {
     Calisan **calisanlar = NULL;
     Birim **birimler = NULL;
     iceAktarBirim(birimDosyaAdi, &birimler);
+    iceAktarCalisan(calisanDosyaAdi, &calisanlar, &birimler);
     Birim* b1 = birimOlustur("Temizlik", 4);
     birimleriDiziyeEkle(&birimler, b1);
     Calisan* c1 = calisanOlustur("Mustafa", "Sağlam", 4, 45000, 2020);
+    Calisan* c2 = calisanOlustur("Hande", "Dereli", 4, 30000, 2022);
     calisanlarıDiziyeEkle(&calisanlar, c1);
+    calisanlarıDiziyeEkle(&calisanlar, c2);
     calisaniBirimeEkle(b1, c1);
-    iceAktarCalisan(calisanDosyaAdi, &calisanlar, &birimler);
+    calisaniBirimeEkle(b1, c2);
 
     for (size_t i = 0; i < calisanDiziBoyut + 1; i++ ) {
         calisanYazdir(calisanlar[i]);
@@ -43,7 +46,7 @@ int main(int argc, char *argv[]) {
         yüksekMaasAlanlar(birimler[i]);
     }
 
-    minimumMaas(60000, calisanlar);
+    minimumMaas(99999, calisanlar);
 
     enZenginler(birimler);
 

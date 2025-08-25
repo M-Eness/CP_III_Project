@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "Proje1.h";
+#include "Proje1.h"
 
 int calisanDiziBoyut = 0; // Tüm çalışanları tutacağım dizinin boyut kontrolü için oluşturuldu.
 int birimDiziBoyut = 0; // Tüm birimleri tutacağım dizinin boyut kontrolü için oluşturuldu.
